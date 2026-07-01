@@ -3,141 +3,536 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Dashboard Personal Premium de Clemente. Control de tiempo, tareas y enlaces rápidos.">
-  <title>Personal Dashboard</title>
+  <title>Whoop Dashboard Personal</title>
+  <!-- Google Fonts: Outfit for titles, Inter for body -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Lucide Icons for premium modern look -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js for Portfolio Distribution Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <div class="app-container">
-    <!-- Header/Greeting -->
-    <header>
-      <div class="greeting-section">
-        <h1 id="greeting-text">¡Hola, Clemente!</h1>
-        <p>¿Qué vamos a lograr hoy?</p>
+    <!-- Sidebar Navigation -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <span class="logo-cbs">CBS</span>
       </div>
-      <div class="time-widget">
-        <div id="clock-display" class="time-display">00:00:00</div>
-        <div id="date-display" class="date-display">Miércoles, 1 de julio</div>
+      <nav class="sidebar-nav">
+        <a href="#" class="nav-item active" title="Dashboard" id="nav-btn-dashboard">
+          <i data-lucide="layout-dashboard"></i>
+        </a>
+        <a href="#" class="nav-item" title="Calendario" id="nav-btn-calendar">
+          <i data-lucide="calendar"></i>
+        </a>
+        <a href="#" class="nav-item" title="Finanzas" id="nav-btn-finances">
+          <i data-lucide="wallet"></i>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <a href="#" class="nav-item" title="Settings" id="nav-settings">
+          <i data-lucide="settings"></i>
+        </a>
       </div>
-    </header>
+    </aside>
 
-    <!-- Dashboard Grid -->
-    <main class="dashboard-grid">
-      
-      <!-- Todo List Widget -->
-      <section class="card span-large" id="todo-card">
-        <h2 class="card-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Tareas Diarias
-        </h2>
-        <div class="todo-input-container">
-          <input type="text" id="todo-input" class="input-field" placeholder="Añadir una nueva tarea..." maxlength="100">
-          <button class="btn btn-primary btn-add" onclick="addTask()" aria-label="Añadir tarea">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+    <!-- Main Content Area -->
+    <main class="main-content">
+      <!-- Header -->
+      <header class="main-header">
+        <div class="header-title">
+          <p class="current-date" id="current-date">Domingo, 28 de Junio</p>
+          <h1 class="main-title">MY DAILY DASHBOARD</h1>
+        </div>
+        <div class="header-actions">
+          <button class="btn btn-primary" id="open-edit-metrics-btn">
+            <i data-lucide="activity"></i> Actualizar Métricas
           </button>
+          <div class="user-profile">
+            <div class="profile-avatar">CB</div>
+          </div>
         </div>
-        <ul id="todo-list" class="todo-list">
-          <!-- Dynamically filled -->
-        </ul>
-      </section>
+      </header>
 
-      <!-- Focus Timer Widget -->
-      <section class="card span-small focus-widget" id="focus-card">
-        <h2 class="card-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
-          Tiempo de Enfoque
-        </h2>
-        <div class="timer-circle">
-          <svg class="timer-svg" viewBox="0 0 160 160">
-            <defs>
-              <linearGradient id="timer-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stop-color="#6366f1" />
-                <stop offset="100%" stop-color="#a855f7" />
-              </linearGradient>
-            </defs>
-            <circle class="circle-bg" cx="80" cy="80" r="75" />
-            <circle id="timer-progress" class="circle-progress" cx="80" cy="80" r="75" />
-          </svg>
-          <div class="timer-text-container">
-            <span id="timer-time" class="timer-time">25:00</span>
-            <span id="timer-mode-text" class="timer-mode">Enfoque</span>
+      <!-- Dashboard Grid -->
+      <div class="dashboard-grid">
+        <!-- Daily To-Dos -->
+        <section class="card card-todos">
+          <div class="card-header">
+            <h2 class="card-title"><i data-lucide="check-circle-2"></i> DAILY TO-DOS</h2>
+            <span class="badge" id="todo-count">0/0</span>
           </div>
-        </div>
-        <div class="timer-controls">
-          <button id="btn-play-pause" class="btn btn-primary" onclick="toggleTimer()">Iniciar</button>
-          <button class="btn" onclick="resetTimer()">Reiniciar</button>
-        </div>
-      </section>
+          <div class="card-body">
+            <ul class="todo-list" id="todo-list">
+              <!-- Dynamically populated -->
+            </ul>
+            <form class="todo-form" id="todo-form">
+              <input type="text" id="new-todo-input" placeholder="Agregar nueva tarea..." required autocomplete="off">
+              <button type="submit" class="btn-add-todo" aria-label="Agregar tarea">
+                <i data-lucide="plus"></i>
+              </button>
+            </form>
+          </div>
+        </section>
 
-      <!-- Weather/Status Widget -->
-      <section class="card span-medium" id="status-card">
-        <h2 class="card-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg>
-          Ambiente Actual
-        </h2>
-        <div class="weather-info">
-          <div class="weather-temp">22°C</div>
-          <div class="weather-details">
-            <div class="weather-condition">Despejado</div>
-            <div class="weather-location">Santiago, CL</div>
+        <!-- Health Metrics -->
+        <section class="card card-metrics">
+          <div class="card-header">
+            <h2 class="card-title"><i data-lucide="heart-pulse"></i> HEALTH METRICS</h2>
           </div>
-        </div>
-        <div class="weather-stats">
-          <div class="stat-item">
-            <span class="stat-label">Humedad</span>
-            <span class="stat-value">45%</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">Viento</span>
-            <span class="stat-value">12 km/h</span>
-          </div>
-          <div class="stat-item">
-            <span class="stat-label">UV</span>
-            <span class="stat-value">Bajo</span>
-          </div>
-        </div>
-      </section>
+          <div class="card-body metrics-container">
+            <!-- Recovery Ring -->
+            <div class="metric-widget recovery" id="metric-recovery-widget">
+              <div class="ring-container">
+                <svg class="ring-svg" viewBox="0 0 120 120">
+                  <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                  <circle class="ring-fg" cx="60" cy="60" r="50" id="ring-recovery-fg"></circle>
+                </svg>
+                <div class="ring-label">
+                  <span class="ring-value" id="val-recovery">85%</span>
+                </div>
+              </div>
+              <span class="metric-name">Recovery</span>
+            </div>
 
-      <!-- Quick Links Widget -->
-      <section class="card span-medium" id="links-card">
-        <h2 class="card-title">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          Acceso Rápido
-        </h2>
-        <div class="links-grid">
-          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="link-card">
-            <div class="link-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            <!-- Activity / Strain Ring -->
+            <div class="metric-widget activity" id="metric-activity-widget">
+              <div class="ring-container">
+                <svg class="ring-svg" viewBox="0 0 120 120">
+                  <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                  <circle class="ring-fg" cx="60" cy="60" r="50" id="ring-activity-fg"></circle>
+                </svg>
+                <div class="ring-label">
+                  <span class="ring-value" id="val-activity">14.2</span>
+                </div>
+              </div>
+              <span class="metric-name">Activity (Strain)</span>
             </div>
-            <span class="link-title">GitHub</span>
-            <span class="link-desc">Tus repositorios y código</span>
-          </a>
-          <a href="https://notion.so" target="_blank" rel="noopener noreferrer" class="link-card">
-            <div class="link-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-            </div>
-            <span class="link-title">Notion</span>
-            <span class="link-desc">Notas y bases de datos</span>
-          </a>
-          <a href="https://gmail.com" target="_blank" rel="noopener noreferrer" class="link-card">
-            <div class="link-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-            </div>
-            <span class="link-title">Correo</span>
-            <span class="link-desc">Bandeja de entrada</span>
-          </a>
-          <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="link-card">
-            <div class="link-icon">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 11.5c2.5-1 5.5-.5 8 1"></path><path d="M9 14c2-1 4.5-.8 6.5.5"></path><path d="M7 9c3-1.5 7-1 10 1.5"></path></svg>
-            </div>
-            <span class="link-title">Spotify</span>
-            <span class="link-desc">Música para concentrarte</span>
-          </a>
-        </div>
-      </section>
 
+            <!-- Sleep Ring -->
+            <div class="metric-widget sleep" id="metric-sleep-widget">
+              <div class="ring-container">
+                <svg class="ring-svg" viewBox="0 0 120 120">
+                  <circle class="ring-bg" cx="60" cy="60" r="50"></circle>
+                  <circle class="ring-fg" cx="60" cy="60" r="50" id="ring-sleep-fg"></circle>
+                </svg>
+                <div class="ring-label">
+                  <span class="ring-value" id="val-sleep">90%</span>
+                </div>
+              </div>
+              <span class="metric-name">Sleep Performance</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- Habits Tracker -->
+        <section class="card card-habits">
+          <div class="card-header">
+            <h2 class="card-title"><i data-lucide="check-square"></i> HABITS TRACKER</h2>
+            <button class="btn btn-text-icon" id="add-habit-btn">
+              <i data-lucide="plus-circle"></i> Nuevo Hábito
+            </button>
+          </div>
+          <div class="card-body">
+            <div class="habits-table-container">
+              <table class="habits-table">
+                <thead>
+                  <tr>
+                    <th>Hábito</th>
+                    <th>Lun</th>
+                    <th>Mar</th>
+                    <th>Mié</th>
+                    <th>Jue</th>
+                    <th>Vie</th>
+                    <th>Sáb</th>
+                    <th>Dom</th>
+                    <th class="text-center">Progreso</th>
+                  </tr>
+                </thead>
+                <tbody id="habits-tbody">
+                  <!-- Dynamically populated -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- Goals -->
+        <section class="card card-goals">
+          <div class="card-header">
+            <h2 class="card-title"><i data-lucide="award"></i> GOALS</h2>
+            <button class="btn btn-text-icon" id="add-goal-btn">
+              <i data-lucide="plus-circle"></i> Nueva Meta
+            </button>
+          </div>
+          <div class="card-body" id="goals-list-container">
+            <!-- Dynamically populated -->
+          </div>
+        </section>
+      </div>
+
+      <!-- Calendar View (Hidden by default) -->
+      <div class="calendar-view hidden" id="calendar-view">
+        <div class="calendar-grid-layout">
+          <!-- Calendar Main Grid Card -->
+          <div class="card card-calendar-main">
+            <div class="calendar-header-nav">
+              <div class="calendar-month-year">
+                <button class="btn-calendar-nav" id="btn-prev-month"><i data-lucide="chevron-left"></i></button>
+                <h2 id="calendar-month-title">Junio 2026</h2>
+                <button class="btn-calendar-nav" id="btn-next-month"><i data-lucide="chevron-right"></i></button>
+              </div>
+              <div class="calendar-actions">
+                <button class="btn btn-primary" id="btn-new-event">
+                  <i data-lucide="calendar-plus"></i> Nuevo Evento
+                </button>
+              </div>
+            </div>
+            
+            <div class="calendar-weekdays">
+              <div>Lun</div>
+              <div>Mar</div>
+              <div>Mié</div>
+              <div>Jue</div>
+              <div>Vie</div>
+              <div>Sáb</div>
+              <div>Dom</div>
+            </div>
+            
+            <div class="calendar-days" id="calendar-days-grid">
+              <!-- Dynamically populated monthly cells -->
+            </div>
+          </div>
+          
+          <!-- Calendar Sidebar Panel -->
+          <div class="calendar-sidebar-panel">
+            <!-- Google Calendar Connection Card -->
+            <div class="card card-gcal-connect">
+              <div class="card-header">
+                <h3 class="card-title"><i data-lucide="chrome"></i> GOOGLE CALENDAR</h3>
+                <span class="status-indicator disconnected" id="gcal-status-badge">Desconectado</span>
+              </div>
+              <div class="card-body">
+                <p class="panel-desc">Sincroniza tus eventos directamente desde tu cuenta de Google Calendar.</p>
+                
+                <!-- Protocol Warning Banner -->
+                <div class="gcal-protocol-warning hidden" id="gcal-protocol-warning">
+                  <i data-lucide="alert-triangle"></i>
+                  <span>Google Calendar requiere ejecutar la web desde un servidor (ej. <code>http://localhost:3000</code>). El protocolo <code>file://</code> está bloqueado por Google.</span>
+                </div>
+                
+                <div class="gcal-setup-form" id="gcal-setup-form">
+                  <div class="form-group-compact">
+                    <label for="gcal-client-id">Client ID de Google</label>
+                    <input type="text" id="gcal-client-id" placeholder="Ej. 123456-abc.apps.googleusercontent.com">
+                  </div>
+                  <div class="form-group-compact">
+                    <label for="gcal-api-key">API Key de Google</label>
+                    <input type="password" id="gcal-api-key" placeholder="Ej. AIzaSyA123...">
+                  </div>
+                  <button class="btn btn-secondary w-full" id="btn-save-gcal-config">
+                    Guardar Configuración
+                  </button>
+                </div>
+                
+                <div class="gcal-actions-panel hidden" id="gcal-actions-panel">
+                  <button class="btn btn-gcal-auth" id="btn-gcal-connect">
+                    <i data-lucide="log-in"></i> Conectar Cuenta
+                  </button>
+                  <button class="btn btn-secondary w-full hidden" id="btn-gcal-disconnect">
+                    Desconectar
+                  </button>
+                </div>
+                
+                <!-- Demo helper -->
+                <div class="demo-helper-box">
+                  <button class="btn-link" id="btn-load-demo-events">
+                    <i data-lucide="sparkles"></i> Cargar Eventos Demo (Sin API Keys)
+                  </button>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Selected Day Events Card -->
+            <div class="card card-day-events">
+              <div class="card-header">
+                <h3 class="card-title"><i data-lucide="clock"></i> EVENTOS DEL DÍA</h3>
+                <span class="badge" id="selected-day-label">Hoy</span>
+              </div>
+              <div class="card-body">
+                <div class="events-list" id="selected-day-events-list">
+                  <!-- Event list for the clicked day -->
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Finances View (Hidden by default) -->
+      <div class="finances-view hidden" id="finances-view">
+        <div class="finances-grid-layout">
+          <!-- Row 1: Stock Tracker -->
+          <div class="card card-finances-stocks">
+            <div class="card-header">
+              <h2 class="card-title"><i data-lucide="trending-up"></i> Rastreador de Inversiones</h2>
+              <button class="btn btn-primary" id="btn-open-stock-modal">
+                <i data-lucide="plus-circle"></i> Agregar Acción
+              </button>
+            </div>
+            <div class="card-body stocks-container">
+              <div class="stocks-table-wrapper">
+                <table class="stocks-table">
+                  <thead>
+                    <tr>
+                      <th>Ticker</th>
+                      <th>Cantidad</th>
+                      <th>P. Promedio</th>
+                      <th>Precio Actual</th>
+                      <th>Valor Total</th>
+                      <th>Ganancia / Pérdida</th>
+                      <th>Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody id="stocks-tbody">
+                    <!-- Dynamically populated -->
+                  </tbody>
+                </table>
+              </div>
+              <div class="stocks-chart-wrapper">
+                <h3 class="chart-sub-title">Distribución del Portafolio</h3>
+                <div class="chart-canvas-container">
+                  <canvas id="portfolio-chart"></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Row 2: Cash Flow Tracker -->
+          <div class="card card-finances-cashflow">
+            <div class="card-header">
+              <h2 class="card-title"><i data-lucide="arrow-left-right"></i> Gastos e Ingresos Mensuales</h2>
+            </div>
+            <div class="card-body cashflow-container">
+              <!-- Summary cards -->
+              <div class="cashflow-summary-cards">
+                <div class="summary-card income">
+                  <span class="summary-label">Ingresos Totales</span>
+                  <span class="summary-value" id="val-total-income">$0.00</span>
+                </div>
+                <div class="summary-card expenses">
+                  <span class="summary-label">Gastos Totales</span>
+                  <span class="summary-value" id="val-total-expenses">$0.00</span>
+                </div>
+                <div class="summary-card balance positive" id="card-net-balance">
+                  <span class="summary-label">Balance Neto</span>
+                  <span class="summary-value" id="val-net-balance">$0.00</span>
+                </div>
+              </div>
+
+              <div class="cashflow-interactive-wrapper">
+                <!-- Transaction Form -->
+                <div class="transaction-form-wrapper">
+                  <h3 class="panel-sub-title">Registrar Movimiento</h3>
+                  <form id="transaction-form">
+                    <div class="form-group-compact">
+                      <label for="input-tx-desc">Descripción</label>
+                      <input type="text" id="input-tx-desc" placeholder="Ej. Supermercado, Sueldo..." required>
+                    </div>
+                    <div class="form-group-compact">
+                      <label for="input-tx-amount">Monto</label>
+                      <input type="number" id="input-tx-amount" min="0.01" step="0.01" placeholder="Ej. 150.00" required>
+                    </div>
+                    <div class="form-group-compact">
+                      <label for="input-tx-type">Tipo</label>
+                      <select id="input-tx-type" required class="select-compact">
+                        <option value="expense">Gasto</option>
+                        <option value="income">Ingreso</option>
+                      </select>
+                    </div>
+                    <div class="form-group-compact">
+                      <label for="input-tx-category">Categoría</label>
+                      <input type="text" id="input-tx-category" placeholder="Ej. Alimentación, Salario, Ocio..." required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-full">
+                      Guardar Movimiento
+                    </button>
+                  </form>
+                </div>
+
+                <!-- Transactions History -->
+                <div class="transactions-history-wrapper">
+                  <h3 class="panel-sub-title">Historial de Movimientos</h3>
+                  <div class="transactions-list-container">
+                    <div class="transactions-list" id="transactions-list">
+                      <!-- Dynamically populated -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </main>
   </div>
+
+  <!-- Modal: Update Health Metrics -->
+  <div class="modal" id="metrics-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Actualizar Métricas de Salud</h2>
+        <button class="modal-close" id="close-metrics-modal-btn">&times;</button>
+      </div>
+      <form id="metrics-form">
+        <div class="form-group">
+          <label for="input-recovery">Recovery (Recuperación - %)</label>
+          <input type="number" id="input-recovery" min="0" max="100" required>
+          <div class="range-info">Gris/Rojo (0-33%), Amarillo (34-66%), Verde (67-100%)</div>
+        </div>
+        <div class="form-group">
+          <label for="input-activity">Activity (Strain/Esfuerzo - de 0.0 a 21.0)</label>
+          <input type="number" id="input-activity" min="0" max="21" step="0.1" required>
+        </div>
+        <div class="form-group">
+          <label for="input-sleep">Sleep Performance (Rendimiento de Sueño - %)</label>
+          <input type="number" id="input-sleep" min="0" max="100" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-metrics-modal-btn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Habit -->
+  <div class="modal" id="habit-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Agregar Nuevo Hábito</h2>
+        <button class="modal-close" id="close-habit-modal-btn">&times;</button>
+      </div>
+      <form id="habit-form">
+        <div class="form-group">
+          <label for="input-habit-name">Nombre del Hábito</label>
+          <input type="text" id="input-habit-name" placeholder="Ej. Leer 15 minutos, Beber agua..." required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-habit-modal-btn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Agregar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add/Edit Goal -->
+  <div class="modal" id="goal-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="goal-modal-title">Agregar Nueva Meta</h2>
+        <button class="modal-close" id="close-goal-modal-btn">&times;</button>
+      </div>
+      <form id="goal-form">
+        <input type="hidden" id="input-goal-id">
+        <div class="form-group">
+          <label for="input-goal-name">Nombre de la Meta</label>
+          <input type="text" id="input-goal-name" placeholder="Ej. Correr 10km semanales" required>
+        </div>
+        <div class="form-group">
+          <label for="input-goal-target">Objetivo Numérico (Opcional)</label>
+          <input type="number" id="input-goal-target" placeholder="Ej. 10" min="1">
+        </div>
+        <div class="form-group">
+          <label for="input-goal-current">Progreso Actual</label>
+          <input type="number" id="input-goal-current" placeholder="Ej. 4" min="0" defaultValue="0">
+        </div>
+        <div class="form-group">
+          <label for="input-goal-unit">Unidad (Opcional)</label>
+          <input type="text" id="input-goal-unit" placeholder="Ej. km, libros, %">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-goal-modal-btn">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="save-goal-btn">Guardar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Event -->
+  <div class="modal" id="event-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 id="event-modal-title">Crear Nuevo Evento</h2>
+        <button class="modal-close" id="close-event-modal-btn">&times;</button>
+      </div>
+      <form id="event-form">
+        <input type="hidden" id="input-event-id">
+        <div class="form-group">
+          <label for="input-event-title">Título del Evento</label>
+          <input type="text" id="input-event-title" placeholder="Ej. Reunión de equipo, Gimnasio..." required>
+        </div>
+        <div class="form-group">
+          <label for="input-event-date">Fecha</label>
+          <input type="date" id="input-event-date" required>
+        </div>
+        <div class="form-group">
+          <label for="input-event-time">Hora de Inicio (Opcional)</label>
+          <input type="time" id="input-event-time">
+        </div>
+        <div class="form-group">
+          <label for="input-event-description">Descripción (Opcional)</label>
+          <input type="text" id="input-event-description" placeholder="Detalles del evento...">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-event-modal-btn">Cancelar</button>
+          <button type="submit" class="btn btn-primary" id="btn-submit-event">Crear Evento</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Modal: Add Stock -->
+  <div class="modal" id="stock-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Agregar Activo al Portafolio</h2>
+        <button class="modal-close" id="close-stock-modal-btn">&times;</button>
+      </div>
+      <form id="stock-form">
+        <div class="form-group">
+          <label for="input-stock-ticker">Ticker de la Acción</label>
+          <input type="text" id="input-stock-ticker" placeholder="Ej. AAPL, TSLA, NVDA" required autocomplete="off">
+        </div>
+        <div class="form-group">
+          <label for="input-stock-avg-price">Precio Promedio de Compra ($)</label>
+          <input type="number" id="input-stock-avg-price" min="0.01" step="0.01" placeholder="Ej. 185.50" required>
+        </div>
+        <div class="form-group">
+          <label for="input-stock-qty">Cantidad de Acciones</label>
+          <input type="number" id="input-stock-qty" min="0.0001" step="0.0001" placeholder="Ej. 12" required>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" id="cancel-stock-modal-btn">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Agregar Acción</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Google API Client Libraries -->
+  <script async defer src="https://apis.google.com/js/api.js" onload="gapiLoaded()"></script>
+  <script async defer src="https://accounts.google.com/gsi/client" onload="gisLoaded()"></script>
+  
   <script src="app.js"></script>
+  <script>
+    // Initialize Lucide icons on page load
+    document.addEventListener("DOMContentLoaded", () => {
+      lucide.createIcons();
+    });
+  </script>
 </body>
 </html>
