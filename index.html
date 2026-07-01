@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Dashboard Personal Premium de Clemente. Control de tiempo, tareas y enlaces rápidos.">
+  <title>Personal Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <!-- Header/Greeting -->
+    <header>
+      <div class="greeting-section">
+        <h1 id="greeting-text">¡Hola, Clemente!</h1>
+        <p>¿Qué vamos a lograr hoy?</p>
+      </div>
+      <div class="time-widget">
+        <div id="clock-display" class="time-display">00:00:00</div>
+        <div id="date-display" class="date-display">Miércoles, 1 de julio</div>
+      </div>
+    </header>
+
+    <!-- Dashboard Grid -->
+    <main class="dashboard-grid">
+      
+      <!-- Todo List Widget -->
+      <section class="card span-large" id="todo-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4M20 12v6a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h9" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Tareas Diarias
+        </h2>
+        <div class="todo-input-container">
+          <input type="text" id="todo-input" class="input-field" placeholder="Añadir una nueva tarea..." maxlength="100">
+          <button class="btn btn-primary btn-add" onclick="addTask()" aria-label="Añadir tarea">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          </button>
+        </div>
+        <ul id="todo-list" class="todo-list">
+          <!-- Dynamically filled -->
+        </ul>
+      </section>
+
+      <!-- Focus Timer Widget -->
+      <section class="card span-small focus-widget" id="focus-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          Tiempo de Enfoque
+        </h2>
+        <div class="timer-circle">
+          <svg class="timer-svg" viewBox="0 0 160 160">
+            <defs>
+              <linearGradient id="timer-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#6366f1" />
+                <stop offset="100%" stop-color="#a855f7" />
+              </linearGradient>
+            </defs>
+            <circle class="circle-bg" cx="80" cy="80" r="75" />
+            <circle id="timer-progress" class="circle-progress" cx="80" cy="80" r="75" />
+          </svg>
+          <div class="timer-text-container">
+            <span id="timer-time" class="timer-time">25:00</span>
+            <span id="timer-mode-text" class="timer-mode">Enfoque</span>
+          </div>
+        </div>
+        <div class="timer-controls">
+          <button id="btn-play-pause" class="btn btn-primary" onclick="toggleTimer()">Iniciar</button>
+          <button class="btn" onclick="resetTimer()">Reiniciar</button>
+        </div>
+      </section>
+
+      <!-- Weather/Status Widget -->
+      <section class="card span-medium" id="status-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/><circle cx="12" cy="12" r="4"/></svg>
+          Ambiente Actual
+        </h2>
+        <div class="weather-info">
+          <div class="weather-temp">22°C</div>
+          <div class="weather-details">
+            <div class="weather-condition">Despejado</div>
+            <div class="weather-location">Santiago, CL</div>
+          </div>
+        </div>
+        <div class="weather-stats">
+          <div class="stat-item">
+            <span class="stat-label">Humedad</span>
+            <span class="stat-value">45%</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">Viento</span>
+            <span class="stat-value">12 km/h</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-label">UV</span>
+            <span class="stat-value">Bajo</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quick Links Widget -->
+      <section class="card span-medium" id="links-card">
+        <h2 class="card-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6M15 3h6v6M10 14L21 3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Acceso Rápido
+        </h2>
+        <div class="links-grid">
+          <a href="https://github.com" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+            </div>
+            <span class="link-title">GitHub</span>
+            <span class="link-desc">Tus repositorios y código</span>
+          </a>
+          <a href="https://notion.so" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+            </div>
+            <span class="link-title">Notion</span>
+            <span class="link-desc">Notas y bases de datos</span>
+          </a>
+          <a href="https://gmail.com" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+            </div>
+            <span class="link-title">Correo</span>
+            <span class="link-desc">Bandeja de entrada</span>
+          </a>
+          <a href="https://spotify.com" target="_blank" rel="noopener noreferrer" class="link-card">
+            <div class="link-icon">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M8 11.5c2.5-1 5.5-.5 8 1"></path><path d="M9 14c2-1 4.5-.8 6.5.5"></path><path d="M7 9c3-1.5 7-1 10 1.5"></path></svg>
+            </div>
+            <span class="link-title">Spotify</span>
+            <span class="link-desc">Música para concentrarte</span>
+          </a>
+        </div>
+      </section>
+
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
